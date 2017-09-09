@@ -8,8 +8,10 @@
       </span>
     </v-toolbar-title>
     <v-toolbar-items>
-      <v-btn flat dark>
-        Browser
+      <v-btn
+        flat dark
+        @click="navigateTo({name: 'browse'})"
+        >Browser
       </v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
