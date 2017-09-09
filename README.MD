@@ -1,7 +1,7 @@
 # tracker
 
 ### For backend server
-ESLint:
+ESLint (AirBnb guide, JS):
 * Install  eslint (and nodemon)
 * Script for package.json
 ```
