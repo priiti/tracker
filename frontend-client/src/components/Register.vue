@@ -9,10 +9,12 @@
           <v-text-field
             label="Email"
             v-model="email"
+            type="email"
           ></v-text-field>
           <v-text-field
             label="Password"
             v-model="password"
+            type="password"
           ></v-text-field>
           <div class="error" v-html="error"></div>
           <v-btn
