@@ -10,4 +10,7 @@ module.exports = {
       dialect: process.env.DATABASE_DIALECT || 'mysql',
     },
   },
+  authentication: {
+    jwtSecret: process.env.JWT_SECRET || 'secret',
+  },
 };

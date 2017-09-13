@@ -1,38 +1,36 @@
 const Joi = require('joi');
-const { registration } = require('./../constants/constants');
+const { registration } = require('./../enums/user');
 
-module.exports = {
-  register(req, res, next) {
-    const schema = {
-      email: Joi.string().email(),
-      password: Joi.string().regex(new RegExp('^[a-zA-Z0-9]{8,32}$')),
-    };
-    const { error } = Joi.validate(req.body, schema);
-    if (error) {
-      switch (error.details[0].context.key) {
-        case 'email':
-          res.status(400).send({
-            error: registration.badEmailAddress,
-          });
-          break;
-        case 'password':
-          res.status(400).send({
-            error: `${registration.password.badPassword}
+exports.register = async (req, res, next) => {
+  const schema = {
+    email: Joi.string().email(),
+    password: Joi.string().regex(new RegExp('^[a-zA-Z0-9]{8,32}$')),
+  };
+  const { error } = Joi.validate(req.body, schema);
+  if (error) {
+    switch (error.details[0].context.key) {
+      case 'email':
+        res.status(400).send({
+          error: registration.BAD_EMAIL_ADDRESS,
+        });
+        break;
+      case 'password':
+        res.status(400).send({
+          error: `${registration.PASSWORD.BAD_PASSWORD}
             <br>
-            ${registration.password.requiredPasswordCharacters}
+            ${registration.PASSWORD.REQUIRED_PASSWORD_CHARACTERS}
             <br>
-            ${registration.password.requiredPasswordLength}
+            ${registration.PASSWORD.REQUIRED_PASSWORD_LENGTH}
             `,
-          });
-          break;
-        default:
-          res.status(400).send({
-            error: registration.defaultMessage,
-          });
-          break;
-      }
-    } else {
-      next();
+        });
+        break;
+      default:
+        res.status(400).send({
+          error: registration.DEFAULT_REGISTRATION_MESSAGE,
+        });
+        break;
     }
-  },
+  } else {
+    next();
+  }
 };
