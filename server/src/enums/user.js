@@ -6,8 +6,10 @@ module.exports = {
       BAD_PASSWORD: 'The password provided failed to match the following rules:',
       REQUIRED_PASSWORD_CHARACTERS: '1. Password must contain ONLY the following characters: uppercase, lowercase, numerics.',
       REQUIRED_PASSWORD_LENGTH: '2. Password must be at least 8 characters in length and not more than 32 characters in length.',
+      PASSWORD_SALT: 10,
     },
     DEFAULT_REGISTRATION_MESSAGE: 'Invalid registration information.',
+    SUCCESS_MESSAGE: 'Registration completed!',
   },
   login: {
     INCORRECT_LOGIN_INFORMATION: 'Login information was incorrect.',

@@ -1,6 +1,7 @@
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { registration, login, timestamp } = require('./../enums/user');
-const jwt = require('jsonwebtoken');
+const AuthenticationControllerPolicy = require('./../policies/AuthenticationControllerPolicy.js');
 const config = require('./../config/config');
 
 const jwtSignUser = (user) => {
@@ -12,8 +13,19 @@ const jwtSignUser = (user) => {
 
 exports.register = async (req, res) => {
   try {
-    const user = await User.create(req.body);
-    res.send(user.toJSON());
+    const registrationData = {
+      email: req.body.email,
+      password: req.body.password,
+    };
+    registrationData.password = await AuthenticationControllerPolicy
+      .cryptUserPassword(registrationData.password);
+    const user = await User.create(registrationData);
+    if (!user) {
+      throw new Error();
+    }
+    res.send({
+      message: registration.SUCCESS_MESSAGE,
+    });
   } catch (error) {
     res.status(400).send({
       error: registration.EMAIL_ADDRESS_IN_USE,
@@ -34,7 +46,7 @@ exports.login = async (req, res) => {
         error: login.INCORRECT_LOGIN_INFORMATION,
       });
     }
-    const isPasswordValid = password === user.password;
+    const isPasswordValid = await AuthenticationControllerPolicy.checkUserPassword(user, password);
     if (!isPasswordValid) {
       return res.status(403).send({
         error: login.INCORRECT_LOGIN_INFORMATION,

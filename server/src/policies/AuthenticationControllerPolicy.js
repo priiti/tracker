@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const bcrypt = require('bcryptjs');
 const { registration } = require('./../enums/user');
 
 exports.register = async (req, res, next) => {
@@ -32,5 +33,26 @@ exports.register = async (req, res, next) => {
     }
   } else {
     next();
+  }
+};
+
+exports.cryptUserPassword = async (password) => {
+  try {
+    const salt = await bcrypt.genSalt(registration.PASSWORD.PASSWORD_SALT);
+    return await bcrypt.hash(password, salt);
+  } catch (error) {
+    throw new Error();
+  }
+};
+
+exports.checkUserPassword = async (user, password) => {
+  try {
+    const data = await bcrypt.compare(password, user.password);
+    if (!data) {
+      throw new Error();
+    }
+    return data;
+  } catch (error) {
+    throw new Error();
   }
 };
